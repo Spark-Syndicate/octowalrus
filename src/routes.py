@@ -17,4 +17,4 @@ api_router.include_router(example_router, prefix="/example", tags=["example"])
 
 # Add more routers here as needed:
 # api_router.include_router(users_router, prefix="/users", tags=["users"])
-# api_router.include_router(auth_router, prefix="/auth", tags=["auth"]) 
+# api_router.include_router(auth_router, prefix="/auth", tags=["auth"])

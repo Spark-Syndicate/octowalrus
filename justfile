@@ -156,7 +156,7 @@ type-check:
 pre-commit: pre-commit-install
     uv run pre-commit run --all-files
 
-pre-commit-install: install-dev
+@pre-commit-install: install-dev
     uv run pre-commit install
 
 # Clean up

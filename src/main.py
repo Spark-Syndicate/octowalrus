@@ -21,4 +21,4 @@ app.add_middleware(
 )
 
 # Include all API routes
-app.include_router(api_router) 
+app.include_router(api_router)
