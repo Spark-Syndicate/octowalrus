@@ -1,0 +1,11 @@
+apiVersion: v2
+name: octowalrus
+description: A fastapi service for octowalrus by Spark Syndicate
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+sources:
+  - https://github.com/marcstreeter//octowalrus/
+maintainers:
+  - name: Spark Syndicate
+    email: mstreeter@gmail.com 

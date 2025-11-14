@@ -1,0 +1,7 @@
+# THIS FILE IS FOR ASDF(https://asdf-vm.com/) USERS
+# INSTALL REMINDER NOTE: asdf plugin add <name-below> && asdf install <name-below> <corresponding-version>
+tilt 0.35.0
+helm 3.16.3
+kubectl 1.31.3
+python  3.11.14
+uv 0.7.19

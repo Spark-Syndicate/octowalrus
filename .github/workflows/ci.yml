@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main, "feature/**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image with dev dependencies
+        run: docker build --build-arg INSTALL_DEV_DEPS=true -t octowalrus-app .
+
+      - name: Set up pre-commit
+        run: |
+          pip install pre-commit
+          pre-commit install
+
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files
+
+      - name: Run tests in container
+        run: docker run --rm octowalrus-app uv run pytest

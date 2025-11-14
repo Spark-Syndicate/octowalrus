@@ -1,0 +1,44 @@
+# Default values for octowalrus
+# This is a YAML-formatted file.
+
+# Global configuration
+global:
+  environment: production
+  project_name: octowalrus
+
+# Replica count
+replicaCount: 2
+
+# Image configuration
+image:
+  repository: octowalrus-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8000
+  targetPort: 8000
+
+# Resource limits
+resources:
+  requests:
+    memory: 64Mi
+    cpu: 50m
+  limits:
+    memory: 128Mi
+    cpu: 100m
+
+# Environment variables
+env:
+  APP_RUNTIME: tilt
+
+# Selector grouping labels
+labels:
+  api:
+    app: octowalrus
+    service: octowalrus-api
+
+# Development configuration
+dev_enabled: false

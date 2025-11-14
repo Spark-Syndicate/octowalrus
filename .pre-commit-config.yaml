@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        language_version: python3
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        language_version: python3
+  # - repo: https://github.com/tiangolo/ty
+  #   rev: v0.7.0
+  #   hooks:
+  #     - id: ty
+  #       language_version: python3
+  - repo: local
+    hooks:
+      - id: ty-check
+        name: ty-check
+        language: python
+        entry: ty check
+        pass_filenames: false
+        args: [--python=.venv/]
+        additional_dependencies: [ty] 
