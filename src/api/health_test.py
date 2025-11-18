@@ -4,7 +4,6 @@ Tests for health endpoints.
 This module contains tests for the health API endpoints.
 """
 
-import pytest
 from fastapi.testclient import TestClient
 from api.health import router
 

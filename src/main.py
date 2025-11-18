@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.settings import settings
+from core.logging import setup_logging, get_logger
 from routes import api_router
+
+setup_logging()
+logger = get_logger(__name__)
 
 app = FastAPI(
     title="octowalrus",
@@ -11,9 +15,10 @@ app = FastAPI(
     redoc_url="/redoc" if settings.is_development else None,
 )
 
-# CORS middleware
+logger.info("FastAPI application initialized")
+
 app.add_middleware(
-    CORSMiddleware,
+    CORSMiddleware,  # type: ignore[arg-type]
     allow_origins=settings.cors_allow_urls_list,
     allow_credentials=True,
     allow_methods=["*"],

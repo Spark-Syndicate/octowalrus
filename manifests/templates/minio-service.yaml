@@ -1,0 +1,22 @@
+{{- if .Values.minio.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.global.project_name }}-minio
+  labels:
+    {{- include "minioLabels" . | nindent 4 }}
+spec:
+  type: {{ .Values.minio.service.type }}
+  ports:
+    - port: {{ .Values.minio.service.ports.api }}
+      targetPort: api
+      protocol: TCP
+      name: api
+    - port: {{ .Values.minio.service.ports.console }}
+      targetPort: console
+      protocol: TCP
+      name: console
+  selector:
+    {{- include "minioLabels" . | nindent 4 }}
+{{- end }}
+

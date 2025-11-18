@@ -4,6 +4,7 @@
 # Variables
 namespace := "default"
 context := "docker-desktop"
+tilt_port := "10351"
 
 # Default target
 default:
@@ -115,7 +116,7 @@ hook-post-git-init:
 
 # Development commands
 dev: _check-tilt
-    tilt up
+    tilt up --port 10300
 
 dev-stop: _check-tilt
     tilt down

@@ -7,6 +7,7 @@ load('ext://dotenv', 'dotenv')
 # CONFIGURATION
 allow_k8s_contexts('docker-desktop')
 dotenv()  # enriches os.environ with .env vars
+secret_settings(disable_scrub=True)  # Disable automatic redaction of secrets in logs
 
 # CONSTANTS
 SYSENV = dict(os.environ)
@@ -33,6 +34,22 @@ k8s_yaml(
             'DEBUGPY_WAIT': get_env_var('DEBUGPY_WAIT', 'false'),
             'DEBUGPY_PORT': get_env_var('DEBUGPY_PORT', '5678'),
             'INSTALL_DEV_DEPS': get_env_var('INSTALL_DEV_DEPS', 'true'),
+            'LOG_LEVEL': get_env_var('LOG_LEVEL', 'INFO'),
+            'S3_ENDPOINT_URL': get_env_var('S3_ENDPOINT_URL', 'http://octowalrus-minio:9000'),
+            'S3_EXTERNAL_URL': get_env_var('S3_EXTERNAL_URL', 'http://localhost:19000'),  # Port 19000 forwards to MinIO API (9000)
+            'S3_BUCKET': get_env_var('S3_BUCKET', 'octowalrus'),
+            'S3_REGION': get_env_var('S3_REGION', 'us-east-1'),
+            'S3_UPLOAD_EXPIRATION': get_env_var('S3_UPLOAD_EXPIRATION', '3600'),
+        }
+    )
+)
+
+k8s_yaml(
+    secret_from_dict(
+        'octowalrus-minio-secret',
+        inputs={
+            'rootUser': get_env_var('S3_ACCESS_KEY', get_env_var('MINIO_ROOT_USER', 'admin')),
+            'rootPassword': get_env_var('S3_SECRET_KEY', get_env_var('MINIO_ROOT_PASSWORD', 'password')),
         }
     )
 )
@@ -73,4 +90,18 @@ k8s_resource(
         link('http://localhost:18080/redoc', 'ReDoc'),
         link('http://localhost:18080/openapi.json', 'OpenAPI JSON'),
     ],
+)
+
+k8s_resource(
+    'octowalrus-minio',
+    port_forwards=[
+        port_forward(19000, 9000, name="octowalrus-minio-api"),
+        port_forward(19001, 9001, name="octowalrus-minio-console"),
+    ],
+    resource_deps=[],
+    labels=['minio'],
+    links=[
+        link('http://localhost:19000', 'Minio API'),
+        link('http://localhost:19001', 'Minio Console'),
+    ]
 )

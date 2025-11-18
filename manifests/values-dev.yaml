@@ -17,3 +17,17 @@ resources:
 
 env:
   APP_RUNTIME: tilt-dev
+
+# MinIO development overrides
+minio:
+  defaultBucket: octowalrus
+  persistence:
+    # Note: PVC size cannot be reduced once created. Use same or larger size than production.
+    size: 10Gi  # Must be >= production size (10Gi) to avoid PVC resize errors
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 250m

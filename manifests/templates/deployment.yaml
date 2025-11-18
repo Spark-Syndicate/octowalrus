@@ -26,12 +26,27 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.global.project_name }}-config
-          {{- if .Values.env }}
+          {{- if or .Values.env .Values.minio.enabled }}
           # `envFrom` will always be overridden by `env` - watch out what you put into either
           env:
+            {{- if .Values.env }}
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.minio.enabled }}
+            # S3 credentials from secret for API access (mapped from rootUser/rootPassword)
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.project_name }}-minio-secret
+                  key: rootUser
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.global.project_name }}-minio-secret
+                  key: rootPassword
             {{- end }}
           {{- end }}
           resources:

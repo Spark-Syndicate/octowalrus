@@ -39,6 +39,53 @@ labels:
   api:
     app: octowalrus
     service: octowalrus-api
+  minio:
+    app: octowalrus
+    service: minio
+
+# MinIO configuration
+minio:
+  enabled: true
+  replicaCount: 1
+  
+  image:
+    repository: minio/minio
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  ports:
+    api: 9000
+    console: 9001
+  
+  service:
+    type: ClusterIP
+    ports:
+      api: 9000
+      console: 9001
+  
+  auth:
+    rootUser: minioadmin
+    rootPassword: minioadmin
+  
+  # Default bucket to create on startup
+  defaultBucket: ""
+  
+  persistence:
+    enabled: true
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""  # Use default storage class if empty
+  
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 1Gi
+      cpu: 500m
+  
+  env: {}
 
 # Development configuration
 dev_enabled: false
